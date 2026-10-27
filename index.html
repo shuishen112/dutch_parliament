@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dutch Parliament on Slavery – Search</title>
+<link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+<header>
+  <h1>Dutch Parliament on Slavery, 1814–1873</h1>
+  <p class="sub">Search <span id="corpus-size">…</span> of the States General's debates (<em>Handelingen</em>) and papers
+    (<em>Kamerstukken</em>) that mention slavery, from <a href="https://zoek.officielebekendmakingen.nl/">officielebekendmakingen.nl</a>.
+    Type a word, press <b>Search</b>, and check what comes back.</p>
+</header>
+
+<main>
+  <form id="search-form" autocomplete="off">
+    <div class="row">
+      <input id="q" type="search" placeholder="e.g.  slavinnen,  vrijverklaring,  {kinderen|kind} {slavinnen|slaven} vrij ~20" aria-label="Search words">
+      <button type="submit" class="primary">Search</button>
+    </div>
+    <div class="row examples">
+      Try:
+      <button type="button" class="chip" data-q="slavinnen">slavinnen</button>
+      <button type="button" class="chip" data-q="vrijverklaring">vrijverklaring</button>
+      <button type="button" class="chip" data-q="lijfeigenen">lijfeigenen</button>
+      <button type="button" class="chip" data-q="kinderen uit slavinnen">kinderen uit slavinnen</button>
+      <button type="button" class="chip" data-q="{kinderen|kind|slavenkinderen} {vrij|vrijverklaring|vrijgeboren} ~15">{kinderen|kind|slavenkinderen} {vrij|vrijverklaring|vrijgeboren} ~15</button>
+      <button type="button" class="chip lexicon" data-concept="free_womb">Free womb: all passages found by the rules</button>
+    </div>
+    <details class="filters" open>
+      <summary>Filters</summary>
+      <div class="grid">
+        <label>Period
+          <select id="period">
+            <option value="">All years</option>
+          </select>
+        </label>
+        <label>From year <input id="from" type="number" min="1814" max="1873" placeholder="1814"></label>
+        <label>To year <input id="to" type="number" min="1814" max="1873" placeholder="1873"></label>
+        <label>Source <select id="paper"><option value="">All sources</option></select></label>
+        <label>Sort
+          <select id="sort">
+            <option value="oldest" selected>Oldest first</option>
+            <option value="newest">Newest first</option>
+            <option value="score">Best match first</option>
+          </select>
+        </label>
+        <label class="check"><input id="exact" type="checkbox"> Exact spelling only
+          <span class="hint">(otherwise misread and variant spellings are included)</span></label>
+      </div>
+    </details>
+  </form>
+
+  <section id="status" aria-live="polite"></section>
+
+  <section id="summary" hidden>
+    <div id="summary-text"></div>
+    <div id="years" class="years"></div>
+    <details id="concept-box" open hidden>
+      <summary>How these passages were found</summary>
+      <div id="concept-rules"></div>
+      <p class="hint">Each passage carries the strongest rule it meets. Untick a rule to hide its passages.
+        The rules were written from the hand-picked examples; they miss passages that say it in other words.</p>
+      <div id="tiers"></div>
+    </details>
+    <details id="variants-box">
+      <summary>Spellings included in this search</summary>
+      <p class="hint">Old print is often misread by the computer (for example <i>s1aven</i> for <i>slaven</i>),
+        so the search also looks for spellings that differ by a letter or two. Spellings that are much more common than
+        the word you typed are probably other words (<i>anderen</i> for <i>kinderen</i>), so they start unticked.
+        Tick or untick as needed, then press <b>Search again</b>.</p>
+      <div id="variants"></div>
+      <button type="button" id="rerun">Search again</button>
+    </details>
+    <div class="actions">
+      <button type="button" id="download-results">Download this list (spreadsheet)</button>
+      <button type="button" id="copy-link">Copy link to this search</button>
+    </div>
+  </section>
+
+  <section id="results"></section>
+  <div class="more"><button type="button" id="more" hidden>Show more results</button></div>
+
+  <aside id="review-panel">
+    <b>Your checks:</b> <span id="review-count">No passages checked yet.</span>
+    <label>Your name <input id="reviewer" type="text" placeholder="so we know who checked"></label>
+    <button type="button" id="download-reviews" class="primary">Download my checks (spreadsheet)</button>
+    <button type="button" id="clear-reviews" class="danger">Delete</button>
+    <span class="hint">Saved in this browser only — download the file and email it to the project.</span>
+  </aside>
+
+  <details class="help">
+    <summary>How to use this page</summary>
+    <ol>
+      <li>Type one or more words and press <b>Search</b>. Several words must appear close together and in that order
+        (<i>kinderen uit slavinnen</i> finds "de kinderen uit slavinnen geboren").</li>
+      <li>To allow any order, put alternatives in curly brackets and add <b>~</b> and a number of words:
+        <i>{kinderen|kind} {slavinnen|slaven} {vrij|vrijverklaring} ~20</i> finds a word from each bracket within 20 words of each other
+        (at most 60). A <b>*</b> stands for any letters: <i>vrijverklar*</i>, <i>*kinderen</i>.</li>
+      <li><b>Free womb</b> lists every passage found by the project's rules for the idea that children born to enslaved
+        mothers should be free. "Strict" passages are the most likely; "loose" and "context" ones are mostly other topics.</li>
+      <li>Each result shows the date, the document, the part of the document (long debates are cut into passages of about
+        300 words), and the text read by the computer. The text contains errors and sometimes mixes up the two columns of the page:
+        always check the scan. <b>Open the document</b> leads to the scan (PDF) at officielebekendmakingen.nl.
+        If the text is wrong, click <b>Correct OCR</b>, type what the print actually says, and save.</li>
+      <li>For each result, answer the question with <b>Yes, directly</b> (it proposes, debates or rejects freeing those children),
+        <b>Related</b> (how it would work in practice, e.g. guardianship of the children), <b>No</b>, or <b>Unsure</b>; add a note if you like.</li>
+      <li><b>Download this list</b> saves a spreadsheet of every hit with its OCR text and your labels.
+        <b>Download my checks</b> saves only what you labelled or corrected.</li>
+      <li>Put <b>=</b> before a word to turn off variant spellings for that word only (<i>=vrij</i>).</li>
+    </ol>
+    <p>Only documents that mention slavery (a word containing <i>slav</i>, <i>slaaf</i> or <i>lijfeigen</i>) are included.
+      Exact duplicate files and the subject registers are left out.</p>
+  </details>
+</main>
+
+<footer>
+  Text: Staten-Generaal Digitaal via officielebekendmakingen.nl. Text recognition errors are left as in the source OCR.
+  <span id="built"></span>
+</footer>
+
+<script src="app.js?v=2"></script>
+</body>
+</html>
